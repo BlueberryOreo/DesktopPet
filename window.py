@@ -39,6 +39,7 @@ class DesktopPet(QMainWindow):
         self.repaint()
 
     def initPall(self):
+        # 设置图标
         icons = os.path.join("./app_icon.ico")
 
         # 设置右键显示的菜单项
