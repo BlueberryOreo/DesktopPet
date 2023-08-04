@@ -7,6 +7,8 @@ from PyQt5.QtWebChannel import QWebChannel
 import os
 import sys
 
+from utils import CallHandler
+
 
 class DesktopPet(QMainWindow):
     def __init__(self, parent=None, **kwargs) -> None:
@@ -52,15 +54,21 @@ class DesktopPet(QMainWindow):
     def initPetImage(self):
         # 嵌入一个html作为webm的显示平台
         self.browser = QWebEngineView()
+        self.channel = QWebChannel()
+        self.handler = CallHandler() # 实例化QWebChannel的前端处理对象
+        self.channel.registerObject('PyHandler', self.handler) # 将前端处理对象在前端页面中注册为名PyHandler对象，此对象在前端访问时名称即为PyHandler'
         # print("file:///" + os.getcwd().replace('\\', '/') + "/index.html")
-        self.browser.load(QUrl("file:///" + os.getcwd().replace('\\', '/') + "/index.html"))
+        self.browser.load(QUrl("file:///" + os.getcwd().replace('\\', '/') + "/web/index.html"))
         # 设置网页背景为透明
         self.browser.page().setBackgroundColor(Qt.transparent)
+
+        self.browser.page().setWebChannel(self.channel) # 挂载前端处理对象
         
         self.setCentralWidget(self.browser)
 
     def quit(self):
         self.close()
+        self.browser.page().profile().clearHttpCache()
         sys.exit()
     
     def showwin(self):
