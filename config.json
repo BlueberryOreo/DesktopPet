@@ -1,0 +1,12 @@
+{
+    "window": {
+        "size": [500, 500],
+        "pady": 10
+    },
+    "model": {
+        "name": "Amiya-default",
+        "path": "./models/Amiya-default",
+        "file-num": 5,
+        "default-pause-name": "-默认-基建-Relax-x1.webm"
+    }
+}
