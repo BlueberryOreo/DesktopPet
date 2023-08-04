@@ -19,25 +19,31 @@
         }
     </style>
     <script src="./qwebchannel.js"></script> <!--加载qwebchannel.js-->
-    <script>
+    <script type="text/javascript">
         window.onload = function () {
             try {
                 new QWebChannel(qt.webChannelTransport, function (channel) {
                     //将QWebChannel的实例挂载到window.PyHandler，后面在javascript中通过window.PyHandler即可调用
                     window.PyHandler = channel.objects.PyHandler;
+                    window.PyHandler.init_home("aaa");
                 });
+                window.init_pet_source = (modelPath) => {
+                    // 初始化开始模型
+                    document.getElementById('model').src = modelPath;
+                    document.getElementById('model').play();
+                };
             } catch (e) {
                 window.console.log(e)
             }
-        }
+        };
     </script>
 </head>
 <body>
     <div>
-        <video autoplay muted loop onclick="window.PyHandler.init_home('这是从前端发到python的消息')">
+        <video autoplay muted loop onclick="window.PyHandler.init_home('这是从前端发到python的消息')" id="model">
             <!-- 在此处填入您的 webm 视频链接 -->
-            <source id="video-source" src="../models/Amiya-default/-默认-基建-Relax-x1.webm" type="video/webm">
-            <!-- <source id="video-source" type="video/webm"> -->
+            <!-- <source id="video-source" src="../models/Amiya-default/-默认-基建-Relax-x1.webm" type="video/webm"> -->
+            <source type="video/webm">
         </video>
     </div>
 </body>

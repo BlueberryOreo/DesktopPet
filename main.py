@@ -6,7 +6,9 @@ from config import *
 
 def start():
     app = QApplication(sys.argv)
-    pet = DesktopPet()
+    default_pose_path = "." + config['model']['path'] + "/" + config['model']['default-pose-name']
+    print(default_pose_path)
+    pet = DesktopPet(default_pose_path)
     pet.show()
     sys.exit(app.exec_())
 
