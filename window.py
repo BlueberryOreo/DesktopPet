@@ -9,6 +9,11 @@ import sys
 from time import sleep
 
 from utils import CallHandler
+from config import config
+
+window_size = config['window']['size']
+pady = config['window']['pady']
+padx = config['window']['padx']
 
 
 class DesktopPet(QMainWindow):
@@ -16,7 +21,7 @@ class DesktopPet(QMainWindow):
         super(DesktopPet, self).__init__(parent)
 
         # 获取屏幕分辨率
-        self.screen_size = QGuiApplication.primaryScreen().geometry()
+        self.screen_size = QGuiApplication.primaryScreen().geometry().getRect()
         # print(self.screen_size)
         self.init()
         self.initPall()
@@ -30,7 +35,7 @@ class DesktopPet(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
         self.setAutoFillBackground(False)
         self.setAttribute(Qt.WA_TranslucentBackground, True)
-        # self.setGeometry(5, self.screen_size[3] - 500, 500, 500)
+        self.setGeometry(padx, self.screen_size[3] - window_size[1] - pady, window_size[0], window_size[1])
         self.repaint()
 
     def initPall(self):

@@ -1,7 +1,8 @@
 {
     "window": {
         "size": [500, 500],
-        "pady": 10
+        "pady": -43,
+        "padx": 10
     },
     "model": {
         "name": "Amiya-default",
