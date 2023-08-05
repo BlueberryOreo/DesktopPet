@@ -6,8 +6,8 @@ window.onload = function () {
             window.PyHandler = channel.objects.PyHandler;
             window.PyHandler.init_home("initializing...");
         });
-        window.init_pet_source = (modelPath) => {
-            // 初始化开始模型
+        window.change_pose = (modelPath) => {
+            // 变换角色动作模型
             document.getElementById('model').src = modelPath;
             document.getElementById('model').play();
         };

@@ -8,6 +8,13 @@
         "name": "Amiya-default",
         "path": "./models/Amiya-default",
         "file-num": 5,
-        "default-pose-name": "-默认-基建-Relax-x1.webm"
+        "default-pose-name": "-默认-基建-Relax-x1.webm",
+        "poses": {
+            "interact": "-默认-基建-Interact-x1.webm",
+            "move": "-默认-基建-Move-x1.webm",
+            "relax": "-默认-基建-Relax-x1.webm",
+            "sit": "-默认-基建-Sit-x1.webm",
+            "sleep": "-默认-基建-Sleep-x1.webm"
+        }
     }
 }

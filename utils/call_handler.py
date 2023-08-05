@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QObject, pyqtSlot
-
+from .global_attributes import config, construct_path
 
 class CallHandler(QObject):
     def __init__(self, view, **args) -> None:
@@ -19,7 +19,8 @@ class CallHandler(QObject):
         # msg = '收到来自python的消息'
         # view.page().runJavaScript("alert('%s')" % msg)
         # view.page().runJavaScript("window.say_hello('%s')" % msg)
-        self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
+        # self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
+        self.change_pose(construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
     
     @pyqtSlot(int, int, result=str)
     def drag_start(self, x, y):
@@ -37,3 +38,12 @@ class CallHandler(QObject):
             win.move(win.x() + dx, win.y() + dy)
         else:
             Exception("MainWindow not found in CallHandler")
+    
+    @pyqtSlot(result=str)
+    def change_pose(self, pose_path):
+        self.view.page().runJavaScript(f"window.change_pose('{pose_path}');")
+
+    @pyqtSlot(result=str)
+    def tapped(self):
+        self.change_pose(config["model"]["path"], config["model"]["poses"]["interact"])
+    

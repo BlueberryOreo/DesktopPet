@@ -2,13 +2,14 @@ from window import *
 from PyQt5.QtWidgets import QApplication
 import sys, os
 
-from config import *
+from utils import config
 
 def start():
     app = QApplication(sys.argv)
-    default_pose_path = "." + config['model']['path'] + "/" + config['model']['default-pose-name']
-    print(default_pose_path)
-    pet = DesktopPet(default_pose_path)
+    # default_pose_path = "." + config['model']['path'] + "/" + config['model']['default-pose-name']
+    # print(construct_path(config['model']['path'], config['model']['default-pose-name']))
+    # print(default_pose_path)
+    pet = DesktopPet()
     pet.show()
     sys.exit(app.exec_())
 

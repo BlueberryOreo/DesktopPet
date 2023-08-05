@@ -9,7 +9,7 @@ import sys
 from time import sleep
 
 from utils import *
-from config import config
+from utils import config
 
 window_size = config['window']['size']
 pady = config['window']['pady']
@@ -17,7 +17,7 @@ padx = config['window']['padx']
 
 
 class DesktopPet(QMainWindow):
-    def __init__(self, default_pose_path, parent=None, **kwargs) -> None:
+    def __init__(self, parent=None, **kwargs) -> None:
         super(DesktopPet, self).__init__(parent)
 
         # 获取屏幕分辨率
@@ -26,7 +26,7 @@ class DesktopPet(QMainWindow):
 
         self.init()
         self.initPall()
-        self.initPetImage(default_pose_path)
+        self.initPetImage()
     
     def init(self):
         # 设置窗口属性:窗口无标题栏且固定在最前面
@@ -59,7 +59,7 @@ class DesktopPet(QMainWindow):
         self.tray_icon.setContextMenu(self.tray_icon_menu)
         self.tray_icon.show()
     
-    def initPetImage(self, default_pose_path):
+    def initPetImage(self):
         # 嵌入一个html作为webm的显示平台
         self.browser = WebView(self)
         self.model_menu = WebMenu()
@@ -68,7 +68,7 @@ class DesktopPet(QMainWindow):
 
         self.channel = QWebChannel()
         # 实例化QWebChannel的前端处理对象
-        self.handler = CallHandler(self.browser, default_pose_path=default_pose_path, window=self)
+        self.handler = CallHandler(self.browser, window=self)
         # 将前端处理对象在前端页面中注册为名PyHandler对象，此对象在前端访问时名称即为PyHandler'
         self.channel.registerObject('PyHandler', self.handler)
         # 挂载前端处理对象

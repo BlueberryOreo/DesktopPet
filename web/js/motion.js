@@ -1,7 +1,17 @@
 let isMouseDown = false;
-const source = document.getElementById("videoContainer");
+const container = document.getElementById("videoContainer");
+const model = document.getElementById("model");
 
-source.addEventListener("mousedown", (event) => {
+// tap
+container.addEventListener("click", (event) => {
+    // alert(model.autoplay);
+    if(!model.paused){
+        model.pause();
+    }
+});
+
+// drag
+container.addEventListener("mousedown", (event) => {
     isMouseDown = true;
     const mouseX = event.screenX;
     const mouseY = event.screenY;
@@ -9,12 +19,12 @@ source.addEventListener("mousedown", (event) => {
     // window.PyHandler.dragging("mouse down");
 });
 
-source.addEventListener("mouseup", (event) => {
+container.addEventListener("mouseup", (event) => {
     isMouseDown = false;
     // window.PyHandler.dragging("mouse up");
 });
 
-source.addEventListener("mousemove", (event) => {
+container.addEventListener("mousemove", (event) => {
     if(isMouseDown){
         const mouseX = event.screenX;
         const mouseY = event.screenY;
