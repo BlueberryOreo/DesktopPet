@@ -1,4 +1,5 @@
 __pycache__
+.idea
 *.txt
 
 test.py
