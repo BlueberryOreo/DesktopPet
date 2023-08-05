@@ -8,7 +8,7 @@ import os
 import sys
 from time import sleep
 
-from utils import CallHandler, WebMenu
+from utils import *
 from config import config
 
 window_size = config['window']['size']
@@ -61,14 +61,14 @@ class DesktopPet(QMainWindow):
     
     def initPetImage(self, default_pose_path):
         # 嵌入一个html作为webm的显示平台
-        self.browser = QWebEngineView(self)
+        self.browser = WebView(self)
         self.model_menu = WebMenu()
         self.browser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.browser.customContextMenuRequested.connect(self.modelConfigMenu)
 
         self.channel = QWebChannel()
         # 实例化QWebChannel的前端处理对象
-        self.handler = CallHandler(self.browser, default_pose_path=default_pose_path, window=self) 
+        self.handler = CallHandler(self.browser, default_pose_path=default_pose_path, window=self)
         # 将前端处理对象在前端页面中注册为名PyHandler对象，此对象在前端访问时名称即为PyHandler'
         self.channel.registerObject('PyHandler', self.handler)
         # 挂载前端处理对象
@@ -79,10 +79,6 @@ class DesktopPet(QMainWindow):
         self.browser.page().setBackgroundColor(Qt.transparent)
         
         self.setCentralWidget(self.browser)
-    
-    def mousePressEvent(self, event) -> None:
-        if event.button():
-            print(event.button())
     
     def modelConfigMenu(self, pos):
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))

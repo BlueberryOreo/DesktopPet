@@ -6,6 +6,8 @@ class CallHandler(QObject):
         super(CallHandler, self).__init__()
         self.view = view
         self.args = args  # dict
+
+        self.mouse = [0, 0]
     
     @pyqtSlot(str, result=str)
     def init_home(self, str_args):
@@ -18,13 +20,20 @@ class CallHandler(QObject):
         # view.page().runJavaScript("alert('%s')" % msg)
         # view.page().runJavaScript("window.say_hello('%s')" % msg)
         self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
+    
+    @pyqtSlot(int, int, result=str)
+    def drag_start(self, x, y):
+        self.mouse[0], self.mouse[1] = x, y
 
     @pyqtSlot(int, int, result=str)
     def dragging(self, x, y):
-        print(x, y)
+        # print(x, y)
         if self.args.get("window"):
             win = self.args.get("window")
-            last_pos = win.geometry()
-            print(last_pos)
+            dx = x - self.mouse[0]
+            dy = y - self.mouse[1]
+            self.mouse[0], self.mouse[1] = x, y
+            # print(dx, dy)
+            win.move(win.x() + dx, win.y() + dy)
         else:
             Exception("MainWindow not found in CallHandler")
