@@ -9,7 +9,8 @@ window.onload = function () {
         window.change_pose = (modelPath) => {
             // 变换角色动作模型
             document.getElementById('model').src = modelPath;
-            document.getElementById('model').play();
+            setTimeout(() => { document.getElementById('model').play(); }, 150);
+            // document.getElementById('model').play();
         };
     } catch (e) {
         window.console.log(e)

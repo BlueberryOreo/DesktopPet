@@ -39,11 +39,15 @@ class CallHandler(QObject):
         else:
             Exception("MainWindow not found in CallHandler")
     
-    @pyqtSlot(result=str)
+    @pyqtSlot(str, result=str)
     def change_pose(self, pose_path):
         self.view.page().runJavaScript(f"window.change_pose('{pose_path}');")
 
-    @pyqtSlot(result=str)
+    @pyqtSlot()
     def tapped(self):
-        self.change_pose(config["model"]["path"], config["model"]["poses"]["interact"])
+        self.change_pose(construct_path(config["model"]["path"], config["model"]["poses"]["interact"]))
+    
+    @pyqtSlot()
+    def reverse_to_default(self):
+        self.change_pose(construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
     
