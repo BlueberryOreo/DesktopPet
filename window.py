@@ -1,4 +1,4 @@
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -8,7 +8,7 @@ import os
 import sys
 from time import sleep
 
-from utils import CallHandler
+from utils import CallHandler, WebMenu
 from config import config
 
 window_size = config['window']['size']
@@ -23,6 +23,7 @@ class DesktopPet(QMainWindow):
         # 获取屏幕分辨率
         self.screen_size = QGuiApplication.primaryScreen().geometry().getRect()
         # print(self.screen_size)
+
         self.init()
         self.initPall()
         self.initPetImage(default_pose_path)
@@ -60,22 +61,41 @@ class DesktopPet(QMainWindow):
     
     def initPetImage(self, default_pose_path):
         # 嵌入一个html作为webm的显示平台
-        self.browser = QWebEngineView()
+        self.browser = QWebEngineView(self)
+        self.model_menu = WebMenu()
+        self.browser.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.browser.customContextMenuRequested.connect(self.modelConfigMenu)
+
         self.channel = QWebChannel()
-        self.handler = CallHandler(self.browser, default_pose_path=default_pose_path) # 实例化QWebChannel的前端处理对象
-        self.channel.registerObject('PyHandler', self.handler) # 将前端处理对象在前端页面中注册为名PyHandler对象，此对象在前端访问时名称即为PyHandler'
+        # 实例化QWebChannel的前端处理对象
+        self.handler = CallHandler(self.browser, default_pose_path=default_pose_path, window=self) 
+        # 将前端处理对象在前端页面中注册为名PyHandler对象，此对象在前端访问时名称即为PyHandler'
+        self.channel.registerObject('PyHandler', self.handler)
+        # 挂载前端处理对象
+        self.browser.page().setWebChannel(self.channel) 
         # print("file:///" + os.getcwd().replace('\\', '/') + "/index.html")
         self.browser.load(QUrl("file:///" + os.getcwd().replace('\\', '/') + "/web/index.html"))
         # 设置网页背景为透明
         self.browser.page().setBackgroundColor(Qt.transparent)
-        # 挂载前端处理对象
-        self.browser.page().setWebChannel(self.channel)
         
         self.setCentralWidget(self.browser)
+    
+    def mousePressEvent(self, event) -> None:
+        if event.button():
+            print(event.button())
+    
+    def modelConfigMenu(self, pos):
+        action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
+        if action == self.model_menu.show_conf:
+            print("显示设置")
+        if action == self.model_menu.quit_app:
+            # 问题：通过网页关闭后程序没有关闭
+            self.quit()
 
     def quit(self):
-        self.close()
         self.browser.page().profile().clearHttpCache()
+        self.browser.stop()
+        self.close()
         sys.exit()
     
     def showwin(self):

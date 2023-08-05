@@ -18,3 +18,13 @@ class CallHandler(QObject):
         # view.page().runJavaScript("alert('%s')" % msg)
         # view.page().runJavaScript("window.say_hello('%s')" % msg)
         self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
+
+    @pyqtSlot(int, int, result=str)
+    def dragging(self, x, y):
+        print(x, y)
+        if self.args.get("window"):
+            win = self.args.get("window")
+            last_pos = win.geometry()
+            print(last_pos)
+        else:
+            Exception("MainWindow not found in CallHandler")
