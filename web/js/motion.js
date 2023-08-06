@@ -5,7 +5,7 @@ const container = document.getElementById("videoContainer");
 const model = document.getElementById("model");
 
 // tap
-// 问题：drag之后也会被判断成click从而触发戳一戳
+// 问题：drag由于存在鼠标点击的动作也会被判断成click从而触发戳一戳
 container.addEventListener("click", (event) => {
     // alert(model.autoplay);
     if(!model.paused && !isTapping && !mouseMoved){
