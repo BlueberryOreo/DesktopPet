@@ -30,7 +30,7 @@ class CallHandler(QObject):
     def dragging(self, x, y):
         # print(x, y)
         if self.args.get("window"):
-            win = self.args.get("window")
+            win = self.args.get("window") # 窗口对象
             # 计算鼠标位置差
             dx = x - self.mouse[0]
             dy = y - self.mouse[1]
