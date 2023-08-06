@@ -24,18 +24,19 @@ class CallHandler(QObject):
     
     @pyqtSlot(int, int, result=str)
     def drag_start(self, x, y):
-        self.mouse[0], self.mouse[1] = x, y
+        self.mouse[0], self.mouse[1] = x, y # 记录鼠标初始位置
 
     @pyqtSlot(int, int, result=str)
     def dragging(self, x, y):
         # print(x, y)
         if self.args.get("window"):
             win = self.args.get("window")
+            # 计算鼠标位置差
             dx = x - self.mouse[0]
             dy = y - self.mouse[1]
             self.mouse[0], self.mouse[1] = x, y
             # print(dx, dy)
-            win.move(win.x() + dx, win.y() + dy)
+            win.move(win.x() + dx, win.y() + dy) # 移动窗口
         else:
             Exception("MainWindow not found in CallHandler")
     
