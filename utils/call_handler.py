@@ -47,16 +47,16 @@ class CallHandler(QObject):
     def change_pose(self, pose_path, pose=None, direct=1):
         self.view.page().runJavaScript(f"window.change_pose('{pose_path}', '{pose}', '{direct}');")
 
-    @pyqtSlot()
-    def tapped(self):
+    @pyqtSlot(int)
+    def tapped(self, direct):
         g_move.set_direct(0) # 停止移动
         g_timer.block(True) # 阻止计时器的循环，并让其睡3s（见random_timer.py）
-        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]), "interact")
+        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]), "interact", direct)
     
-    @pyqtSlot()
-    def tap_stop(self):
+    @pyqtSlot(int)
+    def tap_stop(self, direct):
         g_timer.block(False)
-        self.reverse_to_default()
+        self.reverse_to_default(direct)
 
     @pyqtSlot()
     def reverse_to_default(self, direct=1):
