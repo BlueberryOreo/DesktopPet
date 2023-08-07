@@ -1,5 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtSlot
-from .global_attributes import config, g_construct_path
+
+from .global_attributes import g_construct_path, g_tap
+from .config import config
 
 class CallHandler(QObject):
     def __init__(self, view, **args) -> None:
