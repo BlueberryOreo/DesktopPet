@@ -5,8 +5,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWebChannel import QWebChannel
 
-from ctypes.wintypes import HWND, MSG, POINT
-from win32 import win32api, win32gui
+from ctypes.wintypes import MSG
+from win32 import win32api
 from win32.lib import win32con
 import os
 import sys
@@ -30,13 +30,16 @@ class DesktopPet(QMainWindow):
         # print(type(self.screen_size))
 
         self.BORDER_WIDTH = 5 # 设置边框宽度
-        self.windowEffect = WindowEffect()
+        self.windowEffect = WindowEffect() # 窗口效果器
 
         self.init()
         self.initPall()
         self.initPetImage()
     
     def init(self):
+        """初始化无边框窗口
+
+        """
         # 设置窗口属性:窗口无标题栏且固定在最前面
         # FrameWindowHint:无边框窗口
         # WindowStaysOnTopHint: 窗口总显示在最上面
@@ -53,6 +56,9 @@ class DesktopPet(QMainWindow):
         g_move.start()
 
     def initPall(self):
+        """初始化小图标
+
+        """
         # 设置图标
         icons = os.path.join("./app_icon.ico")
 
@@ -73,7 +79,10 @@ class DesktopPet(QMainWindow):
         self.tray_icon.show()
     
     def initPetImage(self):
-        # 嵌入一个html作为webm的显示平台
+        """建立一个网页嵌入窗口中，作为角色模型的平台
+        
+        """
+        # 嵌入一个html作为模型的显示平台
         self.browser = WebView(self)
         self.model_menu = WebMenu()
         self.browser.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -95,10 +104,15 @@ class DesktopPet(QMainWindow):
         self.browser.load(QUrl("file:///" + os.getcwd().replace('\\', '/') + "/web/index.html"))
         # 设置网页背景为透明
         self.browser.page().setBackgroundColor(Qt.transparent)
+
+        self.browser.setGeometry(QRect(-window_size[0] / 4.5, -window_size[1] / 4.5, window_size[0] + padx, window_size[1] - pady))
         
-        self.setCentralWidget(self.browser)
+        # self.setCentralWidget(self.browser)
     
     def randomChangeModel(self):
+        """随机选择模型
+            配合g_timer
+        """
         # print("change")
         poses = list(filter(lambda x: x != "interact", config["model"]["poses"].keys()))
         # print(poses)
@@ -121,6 +135,9 @@ class DesktopPet(QMainWindow):
         self.handler.change_pose(pose_path, selected_pose, direct)
     
     def windowMove(self, direct):
+        """窗口移动
+            配合g_move
+        """
         # print("moving")
         if(self.x() <= 0 or (self.x() + self.width()) >= self.screen_size[2]):
             # 角色碰到墙上，停下移动，并改动作为默认状态
@@ -132,6 +149,9 @@ class DesktopPet(QMainWindow):
             self.move(self.x() + direct, self.y())
 
     def nativeEvent(self, eventType, message):
+        """无边框窗口伸缩方法
+            参考: https://www.cnblogs.com/zhiyiYo/p/14644099.html
+        """
         msg = MSG.from_address(message.__int__())
         if msg.message == win32con.WM_NCHITTEST:
             # 处理鼠标拖拽消息
@@ -142,20 +162,20 @@ class DesktopPet(QMainWindow):
             rx = xPos + 9 > w - self.BORDER_WIDTH
             ty = yPos < self.BORDER_WIDTH
             by = yPos > h - self.BORDER_WIDTH
-            # 左上角
-            if (lx and ty):
-                return True, win32con.HTTOPLEFT
-            # 右下角
-            elif (rx and by):
-                return True, win32con.HTBOTTOMRIGHT
-            # 右上角
-            elif (rx and ty):
-                return True, win32con.HTTOPRIGHT
-            # 左下角
-            elif (lx and by):
-                return True, win32con.HTBOTTOMLEFT
+            # # 左上角
+            # if (lx and ty):
+            #     return True, win32con.HTTOPLEFT
+            # # 右下角
+            # elif (rx and by):
+            #     return True, win32con.HTBOTTOMRIGHT
+            # # 右上角
+            # elif (rx and ty):
+            #     return True, win32con.HTTOPRIGHT
+            # # 左下角
+            # elif (lx and by):
+            #     return True, win32con.HTBOTTOMLEFT
             # 顶部
-            elif ty:
+            if ty:
                 return True, win32con.HTTOP
             # 底部
             elif by:
@@ -171,7 +191,7 @@ class DesktopPet(QMainWindow):
     def modelConfigMenu(self, pos):
         # 呼出菜单时，暂停计时器，停止移动
         g_timer.block(True)
-        g_move.set_direct(0)
+        self.handler.reverse_to_default()
         # 
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
         if action == self.model_menu.show_adjust:
