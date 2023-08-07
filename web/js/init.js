@@ -6,7 +6,7 @@ window.onload = function () {
             window.PyHandler = channel.objects.PyHandler;
             window.PyHandler.init_home("initializing...");
         });
-        window.change_pose = (modelPath) => {
+        window.change_pose = (pose, modelPath) => {
             // 变换角色动作模型
             var webmModel = document.getElementById("webm-model");
             var gifModel = document.getElementById("gif-model");
@@ -14,8 +14,8 @@ window.onload = function () {
             var type = modelPath.split(".");
             type = type[type.length - 1];
             if(type === "webm"){
-                gifModel.style.display = "none";
-                webmModel.style.display = "block";
+                if(gifModel.style.display != "none") gifModel.style.display = "none";
+                if(webmModel.style.display != "block") webmModel.style.display = "block";
                 webmModel.src = modelPath;
                 setTimeout(() => { webmModel.play(); }, 150);
             }else if(type === "gif"){

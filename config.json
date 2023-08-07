@@ -16,5 +16,6 @@
             "sit": "-默认-基建-Sit-x1.webm",
             "sleep": "-默认-基建-Sleep-x1.webm"
         }
-    }
+    },
+    "change-interval": [2, 2]
 }

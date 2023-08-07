@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QObject, pyqtSlot
-from .global_attributes import config, construct_path
+from .global_attributes import config, g_construct_path
 
 class CallHandler(QObject):
     def __init__(self, view, **args) -> None:
@@ -20,7 +20,7 @@ class CallHandler(QObject):
         # view.page().runJavaScript("alert('%s')" % msg)
         # view.page().runJavaScript("window.say_hello('%s')" % msg)
         # self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
-        self.change_pose(construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
+        self.change_pose("relax", g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
     
     @pyqtSlot(int, int, result=str)
     def drag_start(self, x, y):
@@ -40,15 +40,15 @@ class CallHandler(QObject):
         else:
             Exception("MainWindow not found in CallHandler")
     
-    @pyqtSlot(str, result=str)
-    def change_pose(self, pose_path):
-        self.view.page().runJavaScript(f"window.change_pose('{pose_path}');")
+    @pyqtSlot()
+    def change_pose(self, pose, pose_path):
+        self.view.page().runJavaScript(f"window.change_pose('{pose}', '{pose_path}');")
 
     @pyqtSlot()
     def tapped(self):
-        self.change_pose(construct_path(config["model"]["path"], config["model"]["poses"]["interact"]))
+        self.change_pose("interact", g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]))
     
     @pyqtSlot()
     def reverse_to_default(self):
-        self.change_pose(construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
+        self.change_pose("relax", g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
     

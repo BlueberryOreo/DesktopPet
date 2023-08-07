@@ -7,9 +7,10 @@ from PyQt5.QtWebChannel import QWebChannel
 import os
 import sys
 from time import sleep
+from random import choice
 
 from utils import *
-from utils import config
+from utils import config, g_construct_path
 
 window_size = config['window']['size']
 pady = config['window']['pady']
@@ -66,6 +67,12 @@ class DesktopPet(QMainWindow):
         self.browser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.browser.customContextMenuRequested.connect(self.modelConfigMenu)
 
+        # 创建一个计时器，用于随机变换动作
+        self.timer = RandomTimer()
+        self.timer.start()
+        self.timer.trigger.connect(self.randomChangeModel)
+        self.last_pose = None
+
         self.channel = QWebChannel()
         # 实例化QWebChannel的前端处理对象
         self.handler = CallHandler(self.browser, window=self)
@@ -79,6 +86,18 @@ class DesktopPet(QMainWindow):
         self.browser.page().setBackgroundColor(Qt.transparent)
         
         self.setCentralWidget(self.browser)
+    
+    def randomChangeModel(self):
+        # print("change")
+        poses = list(filter(lambda x: x != "interact", config["model"]["poses"].keys()))
+        # print(poses)
+        selected_pose = choice(poses)
+        if(selected_pose == self.last_pose):
+            return
+        self.last_pose = selected_pose
+        pose_path = g_construct_path(config["model"]["path"], config["model"]["poses"][selected_pose])
+        print(selected_pose, pose_path)
+        self.handler.change_pose(selected_pose, pose_path)
     
     def modelConfigMenu(self, pos):
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
