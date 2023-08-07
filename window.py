@@ -167,6 +167,10 @@ class DesktopPet(QMainWindow):
         return super().nativeEvent(eventType, message)
     
     def modelConfigMenu(self, pos):
+        # 呼出菜单时，暂停计时器，停止移动
+        g_timer.block(True)
+        g_move.set_direct(0)
+        # 
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
         if action == self.model_menu.show_adjust:
             print("调整窗口大小")
@@ -176,6 +180,7 @@ class DesktopPet(QMainWindow):
             print("调整完成")
             self.model_menu.normal_mode()
             self.windowEffect.resetEffect(self.winId())
+        g_timer.block(False)
 
         # if action == self.model_menu.quit_app:
         #     # 问题：通过网页关闭后程序没有关闭

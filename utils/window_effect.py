@@ -1,4 +1,5 @@
 # coding:utf-8
+# refer to https://www.cnblogs.com/zhiyiYo/p/14659981.html
 from ctypes import POINTER, Structure, c_int, WinDLL, c_bool, sizeof, pointer
 from ctypes.wintypes import DWORD, HWND, ULONG, POINT, RECT, UINT
 from enum import Enum
@@ -60,7 +61,7 @@ class WINDOWCOMPOSITIONATTRIBDATA(Structure):
         ("SizeOfData",  ULONG),
     ]
 
-
+# 设置窗口背景效果（亚克力色，磨砂色，还原）
 class WindowEffect:
     def __init__(self) -> None:
         self.user32 = WinDLL("user32")
