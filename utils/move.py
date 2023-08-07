@@ -5,6 +5,7 @@ from time import sleep
 frame = 30
 sleep_time = 1 / frame
 
+# 控制移动类，用于控制角色移动
 class Move(QThread):
     trigger = pyqtSignal(int) # 触发器，用于在window.py中让窗口移动起来
 

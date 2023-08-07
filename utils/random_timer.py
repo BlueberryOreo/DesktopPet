@@ -3,6 +3,7 @@ from random import randint
 
 from .global_attributes import config
 
+# 随机时钟类，用于随机定时选择角色动作
 class RandomTimer(QThread):
     trigger = pyqtSignal() # 触发器，用于向外面发送信号，告诉外面哪个函数该调用了
 
