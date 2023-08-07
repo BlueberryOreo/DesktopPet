@@ -134,6 +134,7 @@ class DesktopPet(QMainWindow):
         else:
             g_move.set_direct(0)
         self.handler.change_pose(pose_path, selected_pose, direct)
+        self.clearHttpCache()
     
     def windowMove(self, direct):
         """窗口移动
@@ -215,12 +216,16 @@ class DesktopPet(QMainWindow):
         #     self.quit()
 
     def quit(self):
-        self.browser.page().profile().clearHttpCache()
+        # self.browser.page().profile().clearHttpCache()
+        self.clearHttpCache()
         self.browser.stop()
         g_move.terminate()
         g_timer.terminate()
         self.close()
         sys.exit()
+    
+    def clearHttpCache(self):
+        self.browser.page().profile().clearHttpCache()
     
     def showwin(self):
         self.setWindowOpacity(1)

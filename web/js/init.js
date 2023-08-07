@@ -26,6 +26,13 @@ window.onload = function () {
                 if(webmModel.style.display != "block") webmModel.style.display = "block";
 
                 var webmModelPreloader = document.getElementById("webm-model-preloader"); // 预加载视频
+                var previousSrc = webmModelPreloader.src;
+
+                webmModelPreloader.src = "about:blank";
+                webmModelPreloader.load();
+
+                URL.revokeObjectURL(previousSrc);
+
                 webmModelPreloader.src = modelPath;
                 webmModelPreloader.load();
 
