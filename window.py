@@ -105,7 +105,7 @@ class DesktopPet(QMainWindow):
         # 设置网页背景为透明
         self.browser.page().setBackgroundColor(Qt.transparent)
 
-        self.browser.setGeometry(QRect(-window_size[0] / 4.5, -window_size[1] / 4.5, window_size[0] + padx, window_size[1] - pady))
+        self.browser.setGeometry(QRect(-window_size[0] / 4.5, -window_size[1] / 4.5, window_size[0] + padx, window_size[1]))
         
         # self.setCentralWidget(self.browser)
     
