@@ -58,9 +58,10 @@ container.addEventListener("mousemove", (event) => {
 // functions
 function tapWebm(model){
     model.loop = false;
-    window.PyHandler.tapped();
+    var direct = parseInt(webmModel.style.transform.match(/(-?\d+)/)[0]);
+    window.PyHandler.tapped(direct);
     model.addEventListener("ended", (event) => {
-        window.PyHandler.tap_stop();
+        window.PyHandler.tap_stop(direct);
         model.loop = true;
         isTapping = false;
     });

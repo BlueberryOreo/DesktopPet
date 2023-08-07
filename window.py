@@ -192,6 +192,7 @@ class DesktopPet(QMainWindow):
         # 呼出菜单时，暂停计时器，停止移动
         g_timer.block(True)
         self.handler.reverse_to_default()
+        g_move.set_direct(0)
         # 
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
         if action == self.model_menu.show_adjust:
