@@ -100,9 +100,10 @@ class DesktopPet(QMainWindow):
         pose_path = g_construct_path(config["model"]["path"], config["model"]["poses"][selected_pose])
         print(selected_pose, pose_path)
 
-        # direct = choice[-1, 1]
-        direct = 1
+        direct = None
+        # direct = 1
         if selected_pose == "move":
+            direct = choice([-1, 1]) # 限制角色只有在移动的时候才会选择方向
             # self.walk.set_direct(direct)
             g_move.set_direct(direct)
         else:
