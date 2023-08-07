@@ -1,8 +1,13 @@
+from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWebChannel import QWebChannel
+
+from ctypes.wintypes import HWND, MSG, POINT
+from win32 import win32api, win32gui
+from win32.lib import win32con
 import os
 import sys
 from random import choice
@@ -24,6 +29,9 @@ class DesktopPet(QMainWindow):
         self.screen_size = QGuiApplication.primaryScreen().geometry().getRect()
         # print(type(self.screen_size))
 
+        self.BORDER_WIDTH = 5 # 设置边框宽度
+        self.windowEffect = WindowEffect()
+
         self.init()
         self.initPall()
         self.initPetImage()
@@ -34,6 +42,7 @@ class DesktopPet(QMainWindow):
         # WindowStaysOnTopHint: 窗口总显示在最上面
         # SubWindow: 新窗口部件是一个子窗口，而无论窗口部件是否有父窗口部件
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
+        # self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
         self.setAutoFillBackground(False)
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setGeometry(padx, self.screen_size[3] - window_size[1] - pady, window_size[0], window_size[1])
@@ -119,11 +128,54 @@ class DesktopPet(QMainWindow):
             self.move(self.x() + last_direct * -1, self.y())
         else:
             self.move(self.x() + direct, self.y())
+
+    def nativeEvent(self, eventType, message):
+        msg = MSG.from_address(message.__int__())
+        if msg.message == win32con.WM_NCHITTEST:
+            # 处理鼠标拖拽消息
+            xPos = win32api.LOWORD(msg.lParam) - self.frameGeometry().x()
+            yPos = win32api.HIWORD(msg.lParam) - self.frameGeometry().y()
+            w, h = self.width(), self.height()
+            lx = xPos < self.BORDER_WIDTH
+            rx = xPos + 9 > w - self.BORDER_WIDTH
+            ty = yPos < self.BORDER_WIDTH
+            by = yPos > h - self.BORDER_WIDTH
+            # 左上角
+            if (lx and ty):
+                return True, win32con.HTTOPLEFT
+            # 右下角
+            elif (rx and by):
+                return True, win32con.HTBOTTOMRIGHT
+            # 右上角
+            elif (rx and ty):
+                return True, win32con.HTTOPRIGHT
+            # 左下角
+            elif (lx and by):
+                return True, win32con.HTBOTTOMLEFT
+            # 顶部
+            elif ty:
+                return True, win32con.HTTOP
+            # 底部
+            elif by:
+                return True, win32con.HTBOTTOM
+            # 左边
+            elif lx:
+                return True, win32con.HTLEFT
+            # 右边
+            elif rx:
+                return True, win32con.HTRIGHT
+        return super().nativeEvent(eventType, message)
     
     def modelConfigMenu(self, pos):
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
-        if action == self.model_menu.show_conf:
+        if action == self.model_menu.show_adjust:
             print("调整窗口大小")
+            self.model_menu.adjust_mode()
+            self.windowEffect.setAeroEffect(self.winId())
+        if action == self.model_menu.finish_adjust:
+            print("调整完成")
+            self.model_menu.normal_mode()
+            self.windowEffect.resetEffect(self.winId())
 
         # if action == self.model_menu.quit_app:
         #     # 问题：通过网页关闭后程序没有关闭
