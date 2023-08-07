@@ -1,5 +1,4 @@
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QWidget
 from time import sleep
 
 frame = 30
@@ -11,7 +10,7 @@ class Move(QThread):
 
     def __init__(self) -> None:
         super(Move, self).__init__()
-        # self.view = view
+        self._running = False
 
         self.direct = 0 # 1 ->, -1 <-, 0 stay
     
@@ -20,9 +19,13 @@ class Move(QThread):
         self.direct = direct if direct == 0 else 1 if direct > 0 else -1
     
     def run(self):
-        while True:
+        self._running = True
+        while self._running:
             sleep(sleep_time)
             # print("here")
             if self.direct:
                 self.trigger.emit(self.direct)
                 # self.view.move(self.view.x() + self.direct, self.view.y())
+
+    def terminate(self):
+        self._running = False

@@ -5,17 +5,17 @@ from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtWebChannel import QWebChannel
 import os
 import sys
-from time import sleep
 from random import choice
 
 from utils import *
-from utils import config, g_construct_path
+from utils import config, g_construct_path, g_move, g_timer
 
 window_size = config['window']['size']
 pady = config['window']['pady']
 padx = config['window']['padx']
 
 
+# 主桌宠类
 class DesktopPet(QMainWindow):
     def __init__(self, parent=None, **kwargs) -> None:
         super(DesktopPet, self).__init__(parent)
@@ -39,10 +39,9 @@ class DesktopPet(QMainWindow):
         self.setGeometry(padx, self.screen_size[3] - window_size[1] - pady, window_size[0], window_size[1])
         self.repaint()
 
-        # 创建一个窗口移动工具，用于控制窗口的水平移动
-        self.walk = Move()
-        self.walk.trigger.connect(self.windowMove)
-        self.walk.start()
+        # 设置窗口移动工具，用于控制窗口的水平移动
+        g_move.trigger.connect(self.windowMove)
+        g_move.start()
 
     def initPall(self):
         # 设置图标
@@ -71,10 +70,9 @@ class DesktopPet(QMainWindow):
         self.browser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.browser.customContextMenuRequested.connect(self.modelConfigMenu)
 
-        # 创建一个计时器，用于随机变换动作
-        self.timer = RandomTimer()
-        self.timer.start()
-        self.timer.trigger.connect(self.randomChangeModel)
+        # 设置计时器，用于随机变换动作
+        g_timer.trigger.connect(self.randomChangeModel)
+        g_timer.start()
         self.last_pose = None
 
         self.channel = QWebChannel()
@@ -106,10 +104,10 @@ class DesktopPet(QMainWindow):
         direct = 1
         if selected_pose == "move":
             # self.walk.set_direct(direct)
-            self.walk.set_direct(direct)
+            g_move.set_direct(direct)
         else:
             # self.walk.set_direct(0)
-            self.walk.set_direct(0)
+            g_move.set_direct(0)
         self.handler.change_pose(pose_path, selected_pose, direct)
     
     def windowMove(self, direct):
@@ -127,6 +125,8 @@ class DesktopPet(QMainWindow):
     def quit(self):
         self.browser.page().profile().clearHttpCache()
         self.browser.stop()
+        g_move.terminate()
+        g_timer.terminate()
         self.close()
         sys.exit()
     

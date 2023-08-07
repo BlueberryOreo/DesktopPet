@@ -1,6 +1,9 @@
 from PyQt5.QtCore import QObject, pyqtSlot
-from .global_attributes import config, g_construct_path
 
+from .global_attributes import g_construct_path, g_move, g_timer
+from .config import config
+
+# 通讯接口类，用于与前端进行通信
 class CallHandler(QObject):
     def __init__(self, view, **args) -> None:
         super(CallHandler, self).__init__()
@@ -46,8 +49,15 @@ class CallHandler(QObject):
 
     @pyqtSlot()
     def tapped(self):
+        g_move.set_direct(0) # 停止移动
+        g_timer.block(True) # 阻止计时器的循环，并让其睡3s（见random_timer.py）
         self.change_pose(g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]), "interact")
     
+    @pyqtSlot()
+    def tap_stop(self):
+        g_timer.block(False)
+        self.reverse_to_default()
+
     @pyqtSlot()
     def reverse_to_default(self):
         self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax")

@@ -60,7 +60,7 @@ function tapWebm(model){
     model.loop = false;
     window.PyHandler.tapped();
     model.addEventListener("ended", (event) => {
-        window.PyHandler.reverse_to_default();
+        window.PyHandler.tap_stop();
         model.loop = true;
         isTapping = false;
     });
