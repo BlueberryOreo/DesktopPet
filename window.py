@@ -85,6 +85,7 @@ class DesktopPet(QMainWindow):
         # 嵌入一个html作为模型的显示平台
         self.browser = WebView(self)
         self.model_menu = WebMenu()
+        self.is_resizing = False
         self.browser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.browser.customContextMenuRequested.connect(self.modelConfigMenu)
 
@@ -152,6 +153,8 @@ class DesktopPet(QMainWindow):
         """无边框窗口伸缩方法
             参考: https://www.cnblogs.com/zhiyiYo/p/14644099.html
         """
+        if not self.is_resizing:
+            return super().nativeEvent(eventType, message)
         msg = MSG.from_address(message.__int__())
         if msg.message == win32con.WM_NCHITTEST:
             # 处理鼠标拖拽消息
@@ -198,10 +201,12 @@ class DesktopPet(QMainWindow):
         if action == self.model_menu.show_adjust:
             print("调整窗口大小")
             self.model_menu.adjust_mode()
+            self.is_resizing = True
             self.windowEffect.setAeroEffect(self.winId())
         if action == self.model_menu.finish_adjust:
             print("调整完成")
             self.model_menu.normal_mode()
+            self.is_resizing = False
             self.windowEffect.resetEffect(self.winId())
         g_timer.block(False)
 
