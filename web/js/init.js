@@ -17,6 +17,7 @@ window.onload = function () {
             // 变换角色动作模型
             var webmModel = document.getElementById("webm-model");
             var gifModel = document.getElementById("gif-model");
+            var nextDirect = "scaleX(" + direct + ")";
 
             var type = modelPath.split(".");
             type = type[type.length - 1];
@@ -24,11 +25,13 @@ window.onload = function () {
                 if(gifModel.style.display != "none") gifModel.style.display = "none";
                 if(webmModel.style.display != "block") webmModel.style.display = "block";
                 webmModel.src = modelPath;
-                setTimeout(() => { webmModel.play(); }, 150);
+                if(Boolean(direct) && webmModel.style.transform != nextDirect) webmModel.style.transform = nextDirect;
+                setTimeout(() => { webmModel.play(); }, 150); // 不设置150ms延迟会导致重复开启play问题
             }else if(type === "gif"){
                 webmModel.style.display = "none";
                 gifModel.style.display = "block";
                 gifModel.src = modelPath;
+                if(Boolean(direct) && gifModel.style.transform != nextDirect) gifModel.style.transform = nextDirect;
             }else{
                 alert("Unrecognized file type: " + type);
             }

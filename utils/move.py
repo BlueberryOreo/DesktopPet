@@ -12,11 +12,15 @@ class Move(QThread):
         super(Move, self).__init__()
         self._running = False
 
-        self.direct = 0 # 1 ->, -1 <-, 0 stay
+        self._direct = 0 # 1 ->, -1 <-, 0 stay
     
     # 设置方向，1表示向右，-1表示向左，为0时表示停止
-    def set_direct(self, direct: int):
-        self.direct = direct if direct == 0 else 1 if direct > 0 else -1
+    def set_direct(self, change_direct: int):
+        self._direct = change_direct if change_direct == 0 else 1 if change_direct > 0 else -1
+
+    @property
+    def direct(self):
+        return self._direct
     
     def run(self):
         self._running = True
