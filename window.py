@@ -15,6 +15,7 @@ pady = config['window']['pady']
 padx = config['window']['padx']
 
 
+# 主桌宠类
 class DesktopPet(QMainWindow):
     def __init__(self, parent=None, **kwargs) -> None:
         super(DesktopPet, self).__init__(parent)

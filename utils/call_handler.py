@@ -3,6 +3,7 @@ from PyQt5.QtCore import QObject, pyqtSlot
 from .global_attributes import g_construct_path, g_move, g_timer
 from .config import config
 
+# 通讯接口类，用于与前端进行通信
 class CallHandler(QObject):
     def __init__(self, view, **args) -> None:
         super(CallHandler, self).__init__()
