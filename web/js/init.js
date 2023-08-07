@@ -6,7 +6,14 @@ window.onload = function () {
             window.PyHandler = channel.objects.PyHandler;
             window.PyHandler.init_home("initializing...");
         });
-        window.change_pose = (pose, modelPath) => {
+        window.change_pose = (modelPath, pose=undefined, direct=1) => {
+            /**
+             * 设置角色动作API
+             * 
+             * modelPath: 角色动作模型路径
+             * pose: 角色动作名称
+             * direct=1: 角色朝向
+             */
             // 变换角色动作模型
             var webmModel = document.getElementById("webm-model");
             var gifModel = document.getElementById("gif-model");

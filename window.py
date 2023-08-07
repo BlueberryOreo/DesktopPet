@@ -1,4 +1,3 @@
-from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -39,6 +38,11 @@ class DesktopPet(QMainWindow):
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setGeometry(padx, self.screen_size[3] - window_size[1] - pady, window_size[0], window_size[1])
         self.repaint()
+
+        # 创建一个窗口移动工具，用于控制窗口的水平移动
+        self.walk = Move()
+        self.walk.trigger.connect(self.windowMove)
+        self.walk.start()
 
     def initPall(self):
         # 设置图标
@@ -97,7 +101,20 @@ class DesktopPet(QMainWindow):
         self.last_pose = selected_pose
         pose_path = g_construct_path(config["model"]["path"], config["model"]["poses"][selected_pose])
         print(selected_pose, pose_path)
-        self.handler.change_pose(selected_pose, pose_path)
+
+        # direct = choice[-1, 1]
+        direct = 1
+        if selected_pose == "move":
+            # self.walk.set_direct(direct)
+            self.walk.set_direct(direct)
+        else:
+            # self.walk.set_direct(0)
+            self.walk.set_direct(0)
+        self.handler.change_pose(pose_path, selected_pose, direct)
+    
+    def windowMove(self, direct):
+        # print("moving")
+        self.move(self.x() + direct, self.y())
     
     def modelConfigMenu(self, pos):
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
