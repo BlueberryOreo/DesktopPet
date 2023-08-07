@@ -7,5 +7,6 @@ dist
 *.exe
 *.spec
 *.zip
+*.pdf
 
 test.py
