@@ -8,8 +8,23 @@ window.onload = function () {
         });
         window.change_pose = (modelPath) => {
             // 变换角色动作模型
-            document.getElementById('model').src = modelPath;
-            setTimeout(() => { document.getElementById('model').play(); }, 150);
+            var webmModel = document.getElementById("webm-model");
+            var gifModel = document.getElementById("gif-model");
+
+            var type = modelPath.split(".");
+            type = type[type.length - 1];
+            if(type === "webm"){
+                gifModel.style.display = "none";
+                webmModel.style.display = "block";
+                webmModel.src = modelPath;
+                setTimeout(() => { webmModel.play(); }, 150);
+            }else if(type === "gif"){
+                webmModel.style.display = "none";
+                gifModel.style.display = "block";
+                gifModel.src = modelPath;
+            }else{
+                alert("Unrecognized file type: " + type);
+            }
             // document.getElementById('model').play();
         };
     } catch (e) {
