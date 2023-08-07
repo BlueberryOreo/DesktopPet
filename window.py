@@ -102,6 +102,7 @@ class DesktopPet(QMainWindow):
         # print("change")
         poses = list(filter(lambda x: x != "interact", config["model"]["poses"].keys()))
         # print(poses)
+        # 注：随机选择动作需要优化，改成概率形式，并建图
         selected_pose = choice(poses)
         if(selected_pose == self.last_pose):
             return
@@ -112,6 +113,7 @@ class DesktopPet(QMainWindow):
         direct = None
         # direct = 1
         if selected_pose == "move":
+            # 注：移动方向的随机选择需要优化，改成概率形式
             direct = choice([-1, 1]) # 限制角色只有在移动的时候才会选择方向
             g_move.set_direct(direct)
         else:
