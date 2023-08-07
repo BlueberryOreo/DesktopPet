@@ -26,7 +26,7 @@ window.onload = function () {
                 if(webmModel.style.display != "block") webmModel.style.display = "block";
                 webmModel.src = modelPath;
                 if(Boolean(direct) && webmModel.style.transform != nextDirect) webmModel.style.transform = nextDirect;
-                setTimeout(() => { webmModel.play(); }, 150);
+                setTimeout(() => { webmModel.play(); }, 150); // 不设置150ms延迟会导致重复开启play问题
             }else if(type === "gif"){
                 webmModel.style.display = "none";
                 gifModel.style.display = "block";
