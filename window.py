@@ -113,6 +113,8 @@ class DesktopPet(QMainWindow):
     def randomChangeModel(self):
         """随机选择模型
             配合g_timer
+
+            疑似该方法出现问题：内存泄露，需要进行内存分析
         """
         # print("change")
         poses = list(filter(lambda x: x != "interact", config["model"]["poses"].keys()))

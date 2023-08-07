@@ -25,16 +25,16 @@ window.onload = function () {
                 if(gifModel.style.display != "none") gifModel.style.display = "none";
                 if(webmModel.style.display != "block") webmModel.style.display = "block";
 
-                var webmModelPreloader = document.getElementById("webm-model-preloader"); // 预加载视频
-                var previousSrc = webmModelPreloader.src;
+                // var webmModelPreloader = document.getElementById("webm-model-preloader"); // 预加载视频
+                // var previousSrc = webmModelPreloader.src;
 
-                webmModelPreloader.src = "about:blank";
-                webmModelPreloader.load();
+                // webmModelPreloader.src = "about:blank";
+                // webmModelPreloader.load();
 
-                URL.revokeObjectURL(previousSrc);
+                // URL.revokeObjectURL(previousSrc);
 
-                webmModelPreloader.src = modelPath;
-                webmModelPreloader.load();
+                // webmModelPreloader.src = modelPath;
+                // webmModelPreloader.load();
 
                 webmModel.src = modelPath;
                 if(Boolean(direct) && webmModel.style.transform != nextDirect) webmModel.style.transform = nextDirect;
