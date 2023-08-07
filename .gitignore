@@ -6,5 +6,6 @@ build
 dist
 *.exe
 *.spec
+*.zip
 
 test.py
