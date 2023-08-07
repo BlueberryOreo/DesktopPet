@@ -1,7 +1,7 @@
 {
     "window": {
         "size": [500, 500],
-        "pady": -43,
+        "pady": 10,
         "padx": 10
     },
     "model": {

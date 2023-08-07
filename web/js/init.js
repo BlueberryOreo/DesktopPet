@@ -28,7 +28,7 @@ window.onload = function () {
                 var webmModelPreloader = document.getElementById("webm-model-preloader"); // 预加载视频
                 webmModelPreloader.src = modelPath;
                 webmModelPreloader.load();
-                
+
                 webmModel.src = modelPath;
                 if(Boolean(direct) && webmModel.style.transform != nextDirect) webmModel.style.transform = nextDirect;
                 setTimeout(() => { webmModel.play(); }, 150); // 不设置150ms延迟会导致重复开启play问题

@@ -59,6 +59,6 @@ class CallHandler(QObject):
         self.reverse_to_default()
 
     @pyqtSlot()
-    def reverse_to_default(self):
-        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax")
+    def reverse_to_default(self, direct=1):
+        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax", direct)
     
