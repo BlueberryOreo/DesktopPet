@@ -22,7 +22,7 @@ class DesktopPet(QMainWindow):
 
         # 获取屏幕分辨率
         self.screen_size = QGuiApplication.primaryScreen().geometry().getRect()
-        # print(self.screen_size)
+        # print(type(self.screen_size))
 
         self.init()
         self.initPall()
@@ -104,16 +104,24 @@ class DesktopPet(QMainWindow):
         # direct = 1
         if selected_pose == "move":
             direct = choice([-1, 1]) # 限制角色只有在移动的时候才会选择方向
-            # self.walk.set_direct(direct)
             g_move.set_direct(direct)
         else:
-            # self.walk.set_direct(0)
             g_move.set_direct(0)
         self.handler.change_pose(pose_path, selected_pose, direct)
     
     def windowMove(self, direct):
         # print("moving")
-        self.move(self.x() + direct, self.y())
+        if(self.x() <= 0 or (self.x() + self.width()) >= self.screen_size[2]):
+            last_direct = g_move.direct
+            g_move.set_direct(0)
+            self.handler.change_pose(
+                g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]),
+                "relax",
+                # last_direct * -1
+            )
+            self.move(self.x() + last_direct * -1, self.y())
+        else:
+            self.move(self.x() + direct, self.y())
     
     def modelConfigMenu(self, pos):
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
