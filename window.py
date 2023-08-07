@@ -112,13 +112,10 @@ class DesktopPet(QMainWindow):
     def windowMove(self, direct):
         # print("moving")
         if(self.x() <= 0 or (self.x() + self.width()) >= self.screen_size[2]):
+            # 角色碰到墙上，停下移动，并改动作为默认状态
             last_direct = g_move.direct
             g_move.set_direct(0)
-            self.handler.change_pose(
-                g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]),
-                "relax",
-                # last_direct * -1
-            )
+            self.handler.reverse_to_default()
             self.move(self.x() + last_direct * -1, self.y())
         else:
             self.move(self.x() + direct, self.y())
