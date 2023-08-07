@@ -20,7 +20,7 @@ class CallHandler(QObject):
         # view.page().runJavaScript("alert('%s')" % msg)
         # view.page().runJavaScript("window.say_hello('%s')" % msg)
         # self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
-        self.change_pose("relax", g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
+        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax")
     
     @pyqtSlot(int, int, result=str)
     def drag_start(self, x, y):
@@ -41,14 +41,14 @@ class CallHandler(QObject):
             Exception("MainWindow not found in CallHandler")
     
     @pyqtSlot()
-    def change_pose(self, pose, pose_path):
-        self.view.page().runJavaScript(f"window.change_pose('{pose}', '{pose_path}');")
+    def change_pose(self, pose_path, pose=None, direct=1):
+        self.view.page().runJavaScript(f"window.change_pose('{pose_path}', '{pose}', '{direct}');")
 
     @pyqtSlot()
     def tapped(self):
-        self.change_pose("interact", g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]))
+        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]), "interact")
     
     @pyqtSlot()
     def reverse_to_default(self):
-        self.change_pose("relax", g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]))
+        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax")
     
