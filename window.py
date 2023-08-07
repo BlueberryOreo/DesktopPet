@@ -124,9 +124,9 @@ class DesktopPet(QMainWindow):
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
         if action == self.model_menu.show_conf:
             print("显示设置")
-        if action == self.model_menu.quit_app:
-            # 问题：通过网页关闭后程序没有关闭
-            self.quit()
+        # if action == self.model_menu.quit_app:
+        #     # 问题：通过网页关闭后程序没有关闭
+        #     self.quit()
 
     def quit(self):
         self.browser.page().profile().clearHttpCache()
