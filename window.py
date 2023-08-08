@@ -114,7 +114,7 @@ class DesktopPet(QMainWindow):
         
         # self.setCentralWidget(self.browser)
     
-    @memory_analyze
+    # @memory_analyze
     def randomChangeModel(self):
         """随机选择模型
             配合g_timer

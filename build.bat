@@ -1,3 +1,4 @@
 @echo off
-pyinstaller -F main.py
+pyinstaller -F -w main.py
 echo 
+pause
