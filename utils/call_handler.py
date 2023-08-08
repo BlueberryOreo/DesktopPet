@@ -2,6 +2,9 @@ from PyQt5.QtCore import QObject, pyqtSlot
 
 from .global_attributes import g_construct_path, g_move, g_timer
 from .config import config
+from .memory_anaylzer import *
+
+from time import sleep
 
 # 通讯接口类，用于与前端进行通信
 class CallHandler(QObject):
@@ -43,6 +46,7 @@ class CallHandler(QObject):
         else:
             Exception("MainWindow not found in CallHandler")
     
+    # @memory_analyze
     @pyqtSlot()
     def change_pose(self, pose_path, pose=None, direct=1):
         self.view.page().runJavaScript(f"window.change_pose('{pose_path}', '{pose}', '{direct}');")
@@ -62,3 +66,6 @@ class CallHandler(QObject):
     def reverse_to_default(self, direct=1):
         self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax", direct)
     
+    @pyqtSlot(str)
+    def print_memory(self, info):
+        print(f"from web {info} current memory {get_current_memory()}")

@@ -18,6 +18,7 @@ window.onload = function () {
             var webmModel = document.getElementById("webm-model");
             var gifModel = document.getElementById("gif-model");
             var nextDirect = "scaleX(" + direct + ")";
+            // window.PyHandler.print_memory("before change pose");
 
             var type = modelPath.split(".");
             type = type[type.length - 1];
@@ -33,8 +34,9 @@ window.onload = function () {
 
                 // URL.revokeObjectURL(previousSrc);
 
-                // webmModelPreloader.src = modelPath;
-                // webmModelPreloader.load();
+                webmModel.pause();
+                webmModel.removeAttribute("src");
+                webmModel.load();
 
                 webmModel.src = modelPath;
                 if(Boolean(direct) && webmModel.style.transform != nextDirect) webmModel.style.transform = nextDirect;
@@ -48,6 +50,9 @@ window.onload = function () {
                 alert("Unrecognized file type: " + type);
             }
             // document.getElementById('model').play();
+            // setTimeout(() => {
+            //     window.PyHandler.print_memory("after change model");
+            // }, 1000);
         };
     } catch (e) {
         window.console.log(e)

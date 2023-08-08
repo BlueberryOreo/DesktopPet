@@ -12,6 +12,10 @@ import os
 import sys
 from random import choice
 
+# memory analyze
+from memory_profiler import profile
+import psutil
+
 from utils import *
 from utils import config, g_construct_path, g_move, g_timer
 
@@ -110,6 +114,7 @@ class DesktopPet(QMainWindow):
         
         # self.setCentralWidget(self.browser)
     
+    # @memory_analyze
     def randomChangeModel(self):
         """随机选择模型
             配合g_timer
@@ -234,3 +239,10 @@ class DesktopPet(QMainWindow):
     
     def runJavaScript(self, cmd):
         self.browser.page().runJavaScript(cmd)
+
+
+def get_current_memory():
+    pid = os.getpid()
+    p = psutil.Process(pid)
+    info = p.memory_full_info()
+    return info.uss / 1024. / 1024. # MB
