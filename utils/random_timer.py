@@ -1,6 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, QThread
 from random import randint
-import gc
 
 from .config import config
 from .memory_anaylzer import *
