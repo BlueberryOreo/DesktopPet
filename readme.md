@@ -6,6 +6,8 @@
 
 ## 食用方法
 
+**在运行前请先运行`steup.bat`，检查是否有正确安装`Python3.9`、`pip`以及一些第三方依赖库**
+
 双击运行main.py，你会得到一只阿米娅
 
 ![阿米娅](./instructions/amiya.jpg)
