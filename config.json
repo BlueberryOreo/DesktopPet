@@ -32,5 +32,5 @@
             [0, 10, 30, 40, 20]
         ]
     },
-    "change-interval": [2, 2]
+    "change-interval": [5, 10]
 }
