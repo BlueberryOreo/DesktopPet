@@ -5,9 +5,9 @@ pid = os.getpid()
 p = psutil.Process(pid)
 
 def memory_analyze(func):
-    def wrapper():
+    def wrapper(*args, **kwargs):
         print(f"[DEBUG] process memory before function {func.__name__} called: {get_current_memory()}")
-        ret = func()
+        ret = func(*args, **kwargs)
         print(f"[DEBUG] process memory after function {func.__name__} called: {get_current_memory()}")
         return ret
     return wrapper
