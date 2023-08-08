@@ -120,6 +120,7 @@ class DesktopPet(QMainWindow):
             配合g_timer
 
             疑似该方法出现问题：内存泄露，需要进行内存分析
+            20230808 该方法没有问题，主要问题出现在前端，并且主要在于pyinstaller打包之后才会出现内存泄露问题
         """
         # print("change")
         poses = list(filter(lambda x: x != "interact", config["model"]["poses"].keys()))
