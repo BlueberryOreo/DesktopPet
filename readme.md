@@ -6,7 +6,7 @@
 
 ## 食用方法
 
-双击运行main.exe，你会得到一只阿米娅
+双击运行main.py，你会得到一只阿米娅
 
 ![阿米娅](./instructions/amiya.jpg)
 
