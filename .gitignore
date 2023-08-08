@@ -1,12 +1,12 @@
-__pycache__
 .idea
 *.txt
-
-build
-dist
 *.exe
 *.spec
 *.zip
 *.pdf
-
 test.py
+!requirements.txt
+
+__pycache__
+build
+dist
