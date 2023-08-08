@@ -8,14 +8,29 @@
         "name": "Amiya-default",
         "path": "./models/Amiya-default",
         "file-num": 5,
-        "default-pose-name": "-默认-基建-Relax-x1.webm",
-        "poses": {
-            "interact": "-默认-基建-Interact-x1.webm",
-            "move": "-默认-基建-Move-x1.webm",
-            "relax": "-默认-基建-Relax-x1.webm",
-            "sit": "-默认-基建-Sit-x1.webm",
-            "sleep": "-默认-基建-Sleep-x1.webm"
-        }
+        "pose-index": {
+            "interact": 0,
+            "move": 1,
+            "relax": 2,
+            "sit": 3,
+            "sleep": 4,
+            "default": 2
+        },
+        "default-pose-name": "relax",
+        "poses": [
+            "-默认-基建-Interact-x1.webm",
+            "-默认-基建-Move-x1.webm",
+            "-默认-基建-Relax-x1.webm",
+            "-默认-基建-Sit-x1.webm",
+            "-默认-基建-Sleep-x1.webm"
+        ],
+        "probability-map": [
+            [0, 100, 0, 0, 0], 
+            [0, 20, 40, 20, 20],
+            [0, 40, 20, 20, 20],
+            [0, 15, 55, 10, 20],
+            [0, 10, 30, 40, 20]
+        ]
     },
-    "change-interval": [5, 10]
+    "change-interval": [2, 2]
 }

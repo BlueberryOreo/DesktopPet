@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtSlot
 
 from .global_attributes import g_construct_path, g_move, g_timer
-from .config import config
+from .config import config, g_poses
 from .memory_anaylzer import *
 
 from time import sleep
@@ -12,6 +12,10 @@ class CallHandler(QObject):
         super(CallHandler, self).__init__()
         self.view = view
         self.args = args  # dict
+
+        self.default_pose_path = g_construct_path(config["model"]["path"], 
+                                                  g_poses[config["model"]["pose-index"]["default"]])
+        self.default_pose_name = config["model"]["default-pose-name"]
 
         self.mouse = [0, 0]
     
@@ -26,7 +30,7 @@ class CallHandler(QObject):
         # view.page().runJavaScript("alert('%s')" % msg)
         # view.page().runJavaScript("window.say_hello('%s')" % msg)
         # self.view.page().runJavaScript(f"window.init_pet_source('{self.args['default_pose_path']}')")
-        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax")
+        self.change_pose(self.default_pose_path, self.default_pose_name)
     
     @pyqtSlot(int, int, result=str)
     def drag_start(self, x, y):
@@ -55,7 +59,8 @@ class CallHandler(QObject):
     def tapped(self, direct):
         g_move.set_direct(0) # 停止移动
         g_timer.block(True) # 阻止计时器的循环，并让其睡3s（见random_timer.py）
-        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["poses"]["interact"]), "interact", direct)
+        self.change_pose(g_construct_path(config["model"]["path"], 
+                                          g_poses[config["model"]["pose-index"]["interact"]]), "interact", direct)
     
     @pyqtSlot(int)
     def tap_stop(self, direct):
@@ -64,7 +69,7 @@ class CallHandler(QObject):
 
     @pyqtSlot()
     def reverse_to_default(self, direct=1):
-        self.change_pose(g_construct_path(config["model"]["path"], config["model"]["default-pose-name"]), "relax", direct)
+        self.change_pose(self.default_pose_path, self.default_pose_name, direct)
     
     @pyqtSlot(str)
     def print_memory(self, info):

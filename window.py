@@ -10,14 +10,13 @@ from win32 import win32api
 from win32.lib import win32con
 import os
 import sys
-from random import choice
+from random import randint
 
 # memory analyze
 from memory_profiler import profile
-import psutil
 
 from utils import *
-from utils import config, g_construct_path, g_move, g_timer
+from utils import config, g_construct_path, g_move, g_timer, g_poses, g_probability_map
 
 window_size = config['window']['size']
 pady = config['window']['pady']
@@ -96,7 +95,7 @@ class DesktopPet(QMainWindow):
         # 设置计时器，用于随机变换动作
         g_timer.trigger.connect(self.randomChangeModel)
         g_timer.start()
-        self.last_pose = None
+        self.current_pose = config["model"]["pose-index"]["default"]
 
         self.channel = QWebChannel()
         # 实例化QWebChannel的前端处理对象
@@ -123,26 +122,28 @@ class DesktopPet(QMainWindow):
             20230808 该方法没有问题，主要问题出现在前端，并且主要在于pyinstaller打包之后才会出现内存泄露问题
         """
         # print("change")
-        poses = list(filter(lambda x: x != "interact", config["model"]["poses"].keys()))
+        poses = list(config["model"]["pose-index"].keys()) # 模型序号
         # print(poses)
         # 注：随机选择动作需要优化，改成概率形式，并建图
-        selected_pose = choice(poses)
-        if(selected_pose == self.last_pose):
+        next_pose = get_next_pose(self.current_pose)
+        if next_pose == self.current_pose:
             return
-        self.last_pose = selected_pose
-        pose_path = g_construct_path(config["model"]["path"], config["model"]["poses"][selected_pose])
+        self.current_pose = next_pose
+        selected_pose = g_poses[next_pose]
+        pose_path = g_construct_path(config["model"]["path"], selected_pose)
+        selected_pose = poses[self.current_pose]
         print(selected_pose, pose_path)
 
         direct = None
         # direct = 1
         if selected_pose == "move":
-            # 注：移动方向的随机选择需要优化，改成概率形式
-            direct = choice([-1, 1]) # 限制角色只有在移动的时候才会选择方向
+            # 注：移动方向的随机选择需要优化，改成概率形式，靠边时向反方向的概率要增大
+            direct = 1 if randint(0, 100) > ((self.x() + self.width() / 2) / self.screen_size[2] * 100) else -1 # 限制角色只有在移动的时候才会选择方向
+            # print(f"now position: {(self.x() + self.width() / 2) / self.screen_size[2] * 100}")
             g_move.set_direct(direct)
         else:
             g_move.set_direct(0)
         self.handler.change_pose(pose_path, selected_pose, direct)
-        self.clearHttpCache()
     
     def windowMove(self, direct):
         """窗口移动
@@ -174,18 +175,6 @@ class DesktopPet(QMainWindow):
             rx = xPos + 9 > w - self.BORDER_WIDTH
             ty = yPos < self.BORDER_WIDTH
             by = yPos > h - self.BORDER_WIDTH
-            # # 左上角
-            # if (lx and ty):
-            #     return True, win32con.HTTOPLEFT
-            # # 右下角
-            # elif (rx and by):
-            #     return True, win32con.HTBOTTOMRIGHT
-            # # 右上角
-            # elif (rx and ty):
-            #     return True, win32con.HTTOPRIGHT
-            # # 左下角
-            # elif (lx and by):
-            #     return True, win32con.HTBOTTOMLEFT
             # 顶部
             if ty:
                 return True, win32con.HTTOP
@@ -242,8 +231,12 @@ class DesktopPet(QMainWindow):
         self.browser.page().runJavaScript(cmd)
 
 
-def get_current_memory():
-    pid = os.getpid()
-    p = psutil.Process(pid)
-    info = p.memory_full_info()
-    return info.uss / 1024. / 1024. # MB
+"""根据概率图获取下一个动作
+
+"""
+def get_next_pose(current_pose) -> int:
+    rnd = randint(1, 100)
+    print(rnd)
+    for i in range(len(g_probability_map[0])):
+        if rnd <= g_probability_map[current_pose][i]:
+            return i
