@@ -12,6 +12,9 @@ import os
 import sys
 from random import choice
 
+# memory analyze
+from memory_profiler import profile
+
 from utils import *
 from utils import config, g_construct_path, g_move, g_timer
 
@@ -55,6 +58,7 @@ class DesktopPet(QMainWindow):
         g_move.trigger.connect(self.windowMove)
         g_move.start()
 
+    @memory_analyze
     def initPall(self):
         """初始化小图标
 
@@ -78,6 +82,7 @@ class DesktopPet(QMainWindow):
         self.tray_icon.setContextMenu(self.tray_icon_menu)
         self.tray_icon.show()
     
+    @memory_analyze
     def initPetImage(self):
         """建立一个网页嵌入窗口中，作为角色模型的平台
         
@@ -110,6 +115,7 @@ class DesktopPet(QMainWindow):
         
         # self.setCentralWidget(self.browser)
     
+    @memory_analyze
     def randomChangeModel(self):
         """随机选择模型
             配合g_timer

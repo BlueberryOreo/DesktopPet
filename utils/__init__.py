@@ -6,6 +6,7 @@ from .window_effect import WindowEffect
 from .move import Move
 from .global_attributes import *
 from .config import config
+from .memory_anaylzer import memory_analyze
 
 __all__ = [
     "CallHandler",
@@ -14,4 +15,5 @@ __all__ = [
     "WindowEffect",
     "RandomTimer",
     "Move",
+    "memory_analyze",
 ]

@@ -3,6 +3,8 @@ from PyQt5.QtCore import QObject, pyqtSlot
 from .global_attributes import g_construct_path, g_move, g_timer
 from .config import config
 
+from memory_profiler import profile
+
 # 通讯接口类，用于与前端进行通信
 class CallHandler(QObject):
     def __init__(self, view, **args) -> None:
@@ -43,6 +45,7 @@ class CallHandler(QObject):
         else:
             Exception("MainWindow not found in CallHandler")
     
+    # @profile
     @pyqtSlot()
     def change_pose(self, pose_path, pose=None, direct=1):
         self.view.page().runJavaScript(f"window.change_pose('{pose_path}', '{pose}', '{direct}');")
