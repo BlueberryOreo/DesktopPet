@@ -4,7 +4,7 @@ class WebMenu(QMenu):
     def __init__(self, parent=None):
         super(WebMenu, self).__init__(parent)
         
-        self.show_adjust = QAction("调整窗口大小", parent)
+        self.show_adjust = QAction("调整窗口位置及大小", parent)
         self.finish_adjust = QAction("完成调整", parent)
         # self.quit_app = QAction("退出", parent)
         self.normal_mode()

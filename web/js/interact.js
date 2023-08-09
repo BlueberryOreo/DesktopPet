@@ -38,6 +38,7 @@ container.addEventListener("mouseup", (event) => {
     isMouseDown = false;
     setTimeout(() => {
         mouseMoved = false;
+        window.PyHandler.drag_stop();
     }, 1); // 添加延时1ms
     // window.PyHandler.dragging("mouse up");
 });

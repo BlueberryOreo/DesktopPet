@@ -1,6 +1,6 @@
-from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
 
-from .global_attributes import g_construct_path, g_move, g_timer
+from .global_attributes import g_construct_path, g_move, g_timer, g_dragging
 from .config import config, g_poses
 from .memory_anaylzer import *
 
@@ -8,6 +8,8 @@ from time import sleep
 
 # 通讯接口类，用于与前端进行通信
 class CallHandler(QObject):
+    trigger = pyqtSignal(bool)
+
     def __init__(self, view, **args) -> None:
         super(CallHandler, self).__init__()
         self.view = view
@@ -34,6 +36,7 @@ class CallHandler(QObject):
     
     @pyqtSlot(int, int, result=str)
     def drag_start(self, x, y):
+        self.trigger.emit(True)
         self.mouse[0], self.mouse[1] = x, y # 记录鼠标初始位置
 
     @pyqtSlot(int, int, result=str)
@@ -49,6 +52,10 @@ class CallHandler(QObject):
             win.move(win.x() + dx, win.y() + dy) # 移动窗口
         else:
             Exception("MainWindow not found in CallHandler")
+    
+    @pyqtSlot()
+    def drag_stop(self):
+        self.trigger.emit(False)
     
     # @memory_analyze
     @pyqtSlot()

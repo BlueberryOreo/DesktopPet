@@ -16,7 +16,7 @@ from random import randint
 from memory_profiler import profile
 
 from utils import *
-from utils import config, g_construct_path, g_move, g_timer, g_poses, g_probability_map
+from utils import config, g_construct_path, g_move, g_timer, g_poses, g_probability_map, g_gravity
 
 window_size = config['window']['size']
 pady = config['window']['pady']
@@ -34,6 +34,9 @@ class DesktopPet(QMainWindow):
 
         self.BORDER_WIDTH = 5 # 设置边框宽度
         self.windowEffect = WindowEffect() # 窗口效果器
+
+        self.dragging = False
+        self.pass_time = 0 # 自由落体时计时器
 
         self.init()
         self.initPall()
@@ -100,6 +103,7 @@ class DesktopPet(QMainWindow):
         self.channel = QWebChannel()
         # 实例化QWebChannel的前端处理对象
         self.handler = CallHandler(self.browser, window=self)
+        self.handler.trigger.connect(self.setDragging)
         # 将前端处理对象在前端页面中注册为名PyHandler对象，此对象在前端访问时名称即为PyHandler'
         self.channel.registerObject('PyHandler', self.handler)
         # 挂载前端处理对象
@@ -150,7 +154,19 @@ class DesktopPet(QMainWindow):
             配合g_move
         """
         # print("moving")
-        if(self.x() <= 0 or (self.x() + self.width()) >= self.screen_size[2]):
+        # 自由落体
+        if not self.is_resizing:
+            if self.y() + window_size[1] < self.screen_size[3] - pady:
+                if not self.dragging:
+                    for _ in range(g_gravity * self.pass_time):
+                        self.move(self.x(), self.y() + 1)
+                    self.pass_time += 1
+            else:
+                self.move(self.x(), self.screen_size[3] - pady - window_size[1])
+                self.pass_time = 0
+
+        # 走路动作
+        if direct and (self.x() <= 0 or (self.x() + self.width()) >= self.screen_size[2]):
             # 角色碰到墙上，停下移动，并改动作为默认状态
             last_direct = g_move.direct
             g_move.set_direct(0)
@@ -197,15 +213,20 @@ class DesktopPet(QMainWindow):
         # 
         action = self.model_menu.exec_(self.browser.mapToGlobal(pos))
         if action == self.model_menu.show_adjust:
-            print("调整窗口大小")
+            print("调整窗口位置及大小")
             self.model_menu.adjust_mode()
             self.is_resizing = True
             self.windowEffect.setAeroEffect(self.winId())
         if action == self.model_menu.finish_adjust:
             print("调整完成")
             self.model_menu.normal_mode()
-            self.is_resizing = False
             self.windowEffect.resetEffect(self.winId())
+            # 更新参数
+            global pady, window_size
+            window_size = [self.size().width(), self.size().height()]
+            pady = self.screen_size[3] - (self.y() + window_size[1])
+            print(window_size, pady)
+            self.is_resizing = False
         g_timer.block(False)
 
         # if action == self.model_menu.quit_app:
@@ -227,8 +248,8 @@ class DesktopPet(QMainWindow):
     def showwin(self):
         self.setWindowOpacity(1)
     
-    def runJavaScript(self, cmd):
-        self.browser.page().runJavaScript(cmd)
+    def setDragging(self, dragging):
+        self.dragging = dragging
 
 
 """根据概率图获取下一个动作

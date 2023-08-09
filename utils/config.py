@@ -1,6 +1,7 @@
 import json
 
 config = json.load(open("./config.json", 'r', encoding="utf-8"))
+
 g_poses = config["model"]["poses"]
 g_probability_map = config["model"]["probability-map"]
 for i in range(len(g_probability_map)):
