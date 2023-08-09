@@ -3,7 +3,6 @@
 *.exe
 *.spec
 *.zip
-*.pdf
 test.py
 !requirements.txt
 
