@@ -156,8 +156,14 @@ class DesktopPet(QMainWindow):
         if not self.is_resizing:
             if self.y() + window_size[1] < self.screen_size[3] - pady:
                 if not self.dragging:
-                    for _ in range(g_gravity * self.pass_time):
-                        self.move(self.x(), self.y() + 1)
+                    # self.move(self.x(), self.y() + g_gravity * self.pass_time)
+                    max_dy = 5 # 纵向一次最大移动距离
+                    dy = g_gravity * self.pass_time
+                    if dy > max_dy:
+                        for _ in range(g_gravity * self.pass_time // max_dy):
+                            self.move(self.x(), self.y() + max_dy)
+                    else:
+                        self.move(self.x(), self.y() + dy)
                     self.pass_time += 1
             else:
                 self.move(self.x(), self.screen_size[3] - pady - window_size[1])
