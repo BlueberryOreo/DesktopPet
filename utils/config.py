@@ -8,3 +8,5 @@ for i in range(len(g_probability_map)):
     for j in range(1, len(g_probability_map[i])):
         g_probability_map[i][j] = g_probability_map[i][j - 1] + g_probability_map[i][j]
 # print(g_probability_map)
+
+g_gravity = config["gravity"]

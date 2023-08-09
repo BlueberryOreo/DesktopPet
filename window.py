@@ -1,4 +1,3 @@
-from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -8,6 +7,7 @@ from PyQt5.QtWebChannel import QWebChannel
 from ctypes.wintypes import MSG
 from win32 import win32api
 from win32.lib import win32con
+from time import sleep
 import os
 import sys
 from random import randint
@@ -21,7 +21,6 @@ from utils import config, g_construct_path, g_move, g_timer, g_poses, g_probabil
 window_size = config['window']['size']
 pady = config['window']['pady']
 padx = config['window']['padx']
-
 
 # 主桌宠类
 class DesktopPet(QMainWindow):
@@ -114,7 +113,6 @@ class DesktopPet(QMainWindow):
         self.browser.page().setBackgroundColor(Qt.transparent)
 
         self.browser.setGeometry(QRect(-window_size[0] / 4.5, -window_size[1] / 4.5, window_size[0] + padx, window_size[1]))
-        
         # self.setCentralWidget(self.browser)
     
     # @memory_analyze

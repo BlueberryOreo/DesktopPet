@@ -32,5 +32,6 @@
             [0, 10, 30, 40, 20]
         ]
     },
-    "change-interval": [5, 10]
+    "change-interval": [5, 10],
+    "gravity": 5
 }
