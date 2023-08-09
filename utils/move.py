@@ -27,8 +27,8 @@ class Move(QThread):
         while self._running:
             sleep(sleep_time)
             # print("here")
-            if self.direct:
-                self.trigger.emit(self.direct)
+            # if self.direct:
+            self.trigger.emit(self.direct)
                 # self.view.move(self.view.x() + self.direct, self.view.y())
 
     def terminate(self):
