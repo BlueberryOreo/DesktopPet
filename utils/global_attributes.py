@@ -10,7 +10,5 @@ g_dragging = False
 g_move = Move()
 g_timer = RandomTimer()
 
-g_gravity = 3
-
 def g_construct_path(*path):
     return "." + os.path.join(*path).replace('\\', '/')

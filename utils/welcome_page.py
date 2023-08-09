@@ -34,8 +34,8 @@ class StartWindow(QWidget):
         self.setLayout(layout)
         
         # 添加右键菜单
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.show_context_menu)
+        # self.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.customContextMenuRequested.connect(self.show_context_menu)
 
     def center_window(self):
         screen_geometry = QApplication.desktop().screenGeometry()
